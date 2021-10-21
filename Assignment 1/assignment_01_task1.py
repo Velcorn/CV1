@@ -1,5 +1,7 @@
 """
-Chams Alassil Khoury, Adrian Westphal and Jan Willruth
+Chams Alassil Khoury,
+Adrian Westphal
+Jan Willruth, 6768273
 """
 
 import numpy as np
@@ -41,9 +43,7 @@ if __name__ == "__main__":
     test_labels = np.asarray(test_batch[b"labels"])
 
     # Extract train/test images for labels 1, 4 and 8
-    auto_label = 1
-    deer_label = 4
-    ship_label = 8
+    auto_label, deer_label, ship_label = 1, 4, 8
     auto_train = extract_images(30, train_data, train_labels, auto_label)
     deer_train = extract_images(30, train_data, train_labels, deer_label)
     ship_train = extract_images(30, train_data, train_labels, ship_label)
@@ -78,10 +78,11 @@ if __name__ == "__main__":
         total = len(test_hists)
         correct = 0
         for test_hist in test_hists:
+            # Calc distances and get index of min distance
             distances = np.asarray([calc_distance(test_hist[1], train_hist[1]) for train_hist in train_hists])
             min_index = np.where(distances == np.min(distances))[0][0]
 
-            # Zip labels to distances for comparison with min_index
+            # Zip labels to distances for comparison
             reference = list(zip([train_hist[0] for train_hist in train_hists], distances))
             if test_hist[0] == train_hists[min_index][0]:
                 correct += 1

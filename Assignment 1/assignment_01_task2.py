@@ -1,3 +1,9 @@
+"""
+Chams Alassil Khoury,
+Adrian Westphal
+Jan Willruth, 6768273
+"""
+
 from skimage.io import imread
 from skimage.color import rgba2rgb, rgb2gray
 from skimage.transform import integral_image, integrate

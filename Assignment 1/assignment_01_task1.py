@@ -1,7 +1,6 @@
 """
 Chams Alassil Khoury, Adrian Westphal and Jan Willruth
 """
-import sys
 
 import numpy as np
 
@@ -21,6 +20,11 @@ def extract_images(number, data, labels, label):
 
     # Reshape into RGB format and transform to float for calculations
     return images.reshape((number, 3, -1)).astype(float)
+
+
+# Convert an array of image data to grayscale
+def to_grayscale(array):
+    return np.sum(array, axis=1) / 3
 
 
 def calc_distance(a, b):
@@ -48,22 +52,22 @@ if __name__ == "__main__":
     ship_test = extract_images(10, test_data, test_labels, ship_label)
 
     # Get train/test grayscale images
-    auto_train_gray = np.sum(auto_train, axis=1) / 3
-    deer_train_gray = np.sum(deer_train, axis=1) / 3
-    ship_train_gray = np.sum(ship_train, axis=1) / 3
-    auto_test_gray = np.sum(auto_test, axis=1) / 3
-    deer_test_gray = np.sum(deer_test, axis=1) / 3
-    ship_test_gray = np.sum(ship_test, axis=1) / 3
+    auto_train_gray = to_grayscale(auto_train)
+    deer_train_gray = to_grayscale(deer_train)
+    ship_train_gray = to_grayscale(ship_train)
+    auto_test_gray = to_grayscale(auto_test)
+    deer_test_gray = to_grayscale(deer_test)
+    ship_test_gray = to_grayscale(ship_test)
 
     # Calculate histograms from train/test grayscale images; attach label for later
-    bins = [2, 10, 51, 255]
-    for bins in bins:
-        auto_train_hists = [[auto_label, np.histogram(image, bins, [0, 255])[0]] for image in auto_train_gray]
-        deer_train_hists = [[deer_label, np.histogram(image, bins, [0, 255])[0]] for image in deer_train_gray]
-        ship_train_hists = [[ship_label, np.histogram(image, bins, [0, 255])[0]] for image in ship_train_gray]
-        auto_test_hists = [[auto_label, np.histogram(image, bins, [0, 255])[0]] for image in auto_test_gray]
-        deer_test_hists = [[deer_label, np.histogram(image, bins, [0, 255])[0]] for image in deer_test_gray]
-        ship_test_hists = [[ship_label, np.histogram(image, bins, [0, 255])[0]] for image in ship_test_gray]
+    bin_sizes = [2, 10, 51, 255]
+    for bin_size in bin_sizes:
+        auto_train_hists = [[auto_label, np.histogram(image, bin_size, [0, 255])[0]] for image in auto_train_gray]
+        deer_train_hists = [[deer_label, np.histogram(image, bin_size, [0, 255])[0]] for image in deer_train_gray]
+        ship_train_hists = [[ship_label, np.histogram(image, bin_size, [0, 255])[0]] for image in ship_train_gray]
+        auto_test_hists = [[auto_label, np.histogram(image, bin_size, [0, 255])[0]] for image in auto_test_gray]
+        deer_test_hists = [[deer_label, np.histogram(image, bin_size, [0, 255])[0]] for image in deer_test_gray]
+        ship_test_hists = [[ship_label, np.histogram(image, bin_size, [0, 255])[0]] for image in ship_test_gray]
 
         # Merge train/test hists
         train_hists = auto_train_hists+deer_train_hists+ship_train_hists
@@ -82,5 +86,6 @@ if __name__ == "__main__":
             if test_hist[0] == train_hists[min_index][0]:
                 correct += 1
 
-        accuracy = round(correct/total, 2)
-        print(f"Classification accuracy (bins = {bins}): {accuracy}%")
+        accuracy = round(100*correct/total, 2)
+        print(f"Classification accuracy (bins = {bin_size}): {(len(str(max(bin_sizes)))-len(str(bin_size)))*' '}"
+              f"{accuracy}%")

@@ -18,12 +18,12 @@ def create_contrast_map(image, c, s):
     y, x = image.shape
     contrast_map = np.zeros((y, x))
 
-    # Iterate over pixels in bound of surround size, compute c and s, and add s-c to contrast_map
+    # Iterate over pixels in bound of surround size, compute c and s, and set s-c in contrast_map
     for i in range(s, y - s):
         for j in range(s, x - s):
-            center = integrate(image, (i, j), (i + c, j + c)) / c * c
-            surround = integrate(image, (i, j), (i + s, j + s)) / s * s
-            contrast_map[i+s, j+s] = surround - center
+            center = integrate(image, (i-c, j-c), (i, j)) / c * c
+            surround = integrate(image, (i-s, j-s), (i, j)) / s * s
+            contrast_map[i, j] = surround - center
 
     return contrast_map
 
@@ -35,13 +35,14 @@ if __name__ == "__main__":
     img_integral = integral_image(img_gray)
 
     # Create and display contrast map for each center+surround size.
-    center_surround = [[11, 21]]  # [[11, 21], [3, 7], [31, 51]]
+    center_surround = [[11, 21], [3, 7], [31, 51]]
     for cs in center_surround:
         img_contrast = create_contrast_map(img_integral, cs[0]-1, cs[1]-1)
         plt.imshow(img_contrast, cmap="gray")
         plt.show()
 
     '''
-    How does the resulting contrast map change?
-    Obviously gets smaller, but also loses details (gets more blurry).
+    How does the resulting contrast map change? (upon changing window sizes)
+    Window size should roughly match the size of the object to highlight, i.e., 
+    smaller size highlights smaller objects, larger size highlights larger objects.
     '''

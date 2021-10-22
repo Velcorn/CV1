@@ -3,6 +3,7 @@ Chams Alassil Khoury, 7161852
 Adrian Westphal,
 Jan Willruth, 6768273
 """
+import sys
 
 from skimage.io import imread
 from skimage.color import rgba2rgb, rgb2gray
@@ -12,16 +13,17 @@ import numpy as np
 
 
 # Create a contrast map an integral image
-def create_contrast_map(image, center, surround):
+def create_contrast_map(image, c, s):
     # Create black image according to image size
-    contrast_map = np.zeros(image.shape)
+    y, x = image.shape
+    contrast_map = np.zeros((y, x))
 
-    # Iterate over pixels in bound of surround size, compute c and s, and add to contrast_map
-    for x in range(surround, image.shape[0] - surround):
-        for y in range(surround, image.shape[1] - surround):
-            c = integrate(image, (x, y), (x + center, y + center)) / center * center
-            s = integrate(image, (x, y), (x + surround, y + surround)) / surround * surround
-            contrast_map[x, y] = s-c
+    # Iterate over pixels in bound of surround size, compute c and s, and add s-c to contrast_map
+    for i in range(s, y - s):
+        for j in range(s, x - s):
+            center = integrate(image, (i, j), (i + c, j + c)) / c * c
+            surround = integrate(image, (i, j), (i + s, j + s)) / s * s
+            contrast_map[i+s, j+s] = surround - center
 
     return contrast_map
 
@@ -33,9 +35,9 @@ if __name__ == "__main__":
     img_integral = integral_image(img_gray)
 
     # Create and display contrast map for each center+surround size.
-    center_surround = [[11, 21], [3, 7], [31, 51]]
+    center_surround = [[11, 21]]  # [[11, 21], [3, 7], [31, 51]]
     for cs in center_surround:
-        img_contrast = create_contrast_map(img_integral, cs[0], cs[1])
+        img_contrast = create_contrast_map(img_integral, cs[0]-1, cs[1]-1)
         plt.imshow(img_contrast, cmap="gray")
         plt.show()
 

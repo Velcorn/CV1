@@ -15,13 +15,10 @@ def unpickle(file):
     return dict
 
 
-# Extract specified number of images/data based on given label
-def extract_images(number, data, labels, label):
-    # Get specified number of images that match given label
-    images = data[labels == label][:number]
-
-    # Reshape into RGB format and transform to float for calculations
-    return images.reshape((number, 3, -1)).astype(float)
+# Extract specified amount of images/data based on given label
+def extract_images(amount, data, labels, label):
+    # Get specified number of images that match given label, reshape into RGB format and type as float for calculations
+    return data[labels == label][:amount].reshape((amount, 3, -1)).astype(float)
 
 
 # Convert an array of image data to grayscale
@@ -43,14 +40,16 @@ if __name__ == "__main__":
     test_data = np.asarray(test_batch[b"data"])
     test_labels = np.asarray(test_batch[b"labels"])
 
-    # Extract train/test images for labels 1, 4 and 8
+    # Extract 30 train/10 test images for labels 1, 4 and 8
     auto_label, deer_label, ship_label = 1, 4, 8
-    auto_train = extract_images(30, train_data, train_labels, auto_label)
-    deer_train = extract_images(30, train_data, train_labels, deer_label)
-    ship_train = extract_images(30, train_data, train_labels, ship_label)
-    auto_test = extract_images(10, test_data, test_labels, auto_label)
-    deer_test = extract_images(10, test_data, test_labels, deer_label)
-    ship_test = extract_images(10, test_data, test_labels, ship_label)
+    train_amount = 30
+    test_amount = 10
+    auto_train = extract_images(train_amount, train_data, train_labels, auto_label)
+    deer_train = extract_images(train_amount, train_data, train_labels, deer_label)
+    ship_train = extract_images(train_amount, train_data, train_labels, ship_label)
+    auto_test = extract_images(test_amount, test_data, test_labels, auto_label)
+    deer_test = extract_images(test_amount, test_data, test_labels, deer_label)
+    ship_test = extract_images(test_amount, test_data, test_labels, ship_label)
 
     # Get train/test grayscale images
     auto_train_gray = to_grayscale(auto_train)

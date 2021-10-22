@@ -3,7 +3,6 @@ Chams Alassil Khoury, 7161852
 Adrian Westphal,
 Jan Willruth, 6768273
 """
-import sys
 
 from skimage.io import imread
 from skimage.color import rgba2rgb, rgb2gray

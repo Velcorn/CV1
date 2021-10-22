@@ -1,6 +1,6 @@
 """
-Chams Alassil Khoury,
-Adrian Westphal
+Chams Alassil Khoury, 7161852
+Adrian Westphal,
 Jan Willruth, 6768273
 """
 
@@ -29,12 +29,13 @@ def to_grayscale(array):
     return np.sum(array, axis=1) / 3
 
 
+# Calculate L2 distance
 def calc_distance(a, b):
     return np.linalg.norm(a - b)
 
 
 if __name__ == "__main__":
-    # Extract data_batch_1/train_batch and the contained labels and data into variables
+    # Extract data_batch_1/train_batch and the contained data and labels into variables
     data_batch_1 = unpickle("CIFAR-10/data_batch_1")
     train_data = np.asarray(data_batch_1[b"data"])
     train_labels = np.asarray(data_batch_1[b"labels"])
@@ -82,7 +83,7 @@ if __name__ == "__main__":
             distances = np.asarray([calc_distance(test_hist[1], train_hist[1]) for train_hist in train_hists])
             min_index = np.where(distances == np.min(distances))[0][0]
 
-            # Zip labels to distances for comparison
+            # Zip labels to distances for comparison - increment counter if labels match
             reference = list(zip([train_hist[0] for train_hist in train_hists], distances))
             if test_hist[0] == train_hists[min_index][0]:
                 correct += 1

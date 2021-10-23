@@ -11,20 +11,25 @@ from skimage.io import imread
 from skimage.transform.integral import integral_image, integrate
 
 
-# Create a contrast map an integral image
+# Create a contrast map of an integral image
 def create_contrast_map(image, c, s):
-    # Create black image according to image shape without surround box borders
+    # Create black image according to image shape
     y, x = image.shape
-    contrast_map = np.zeros((y-s, x-s))
+    contrast_map = np.zeros((y, x))
 
-    # Iterate over pixels in bound of surround size, compute c and s, and set s-c in contrast_map
-    for i in range(s, y):
-        for j in range(s, x):
-            center = integrate(image, (i-c, j-c), (i, j)) / c**2
-            surround = integrate(image, (i-s, j-s), (i, j)) / s**2
-            contrast_map[i-s, j-s] = surround - center
+    # Get distance from center pixel to border of windows
+    cd, sd = c//2, s//2
 
-    return contrast_map
+    # Iterate over pixels in bound of surround distance, compute center- and surround average,
+    # and set surround average - center average in contrast_map
+    for i in range(sd, y-sd):
+        for j in range(sd, x-sd):
+            ca = integrate(image, (i-cd, j-cd), (i+cd, j+cd)) / c**2
+            sa = integrate(image, (i-sd, j-sd), (i+sd, j+sd)) / s**2
+            contrast_map[i, j] = sa - ca
+
+    # Return contrast map without borders
+    return contrast_map[sd:y-sd, sd:x-sd]
 
 
 if __name__ == "__main__":

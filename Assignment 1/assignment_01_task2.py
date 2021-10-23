@@ -12,20 +12,20 @@ from skimage.transform.integral import integral_image, integrate
 
 
 # Create a contrast map of an integral image
-def create_contrast_map(image, c, s):
+def create_contrast_map(image, cs, ss):
     # Create black image according to image shape
     y, x = image.shape
     contrast_map = np.zeros((y, x))
 
     # Get distance from center pixel to border of windows
-    cd, sd = c//2, s//2
+    cd, sd = cs // 2, ss // 2
 
     # Iterate over pixels in bound of surround distance, compute center- and surround average,
     # and set surround average - center average in contrast_map
     for i in range(sd, y-sd):
         for j in range(sd, x-sd):
-            ca = integrate(image, (i-cd, j-cd), (i+cd, j+cd)) / c**2
-            sa = integrate(image, (i-sd, j-sd), (i+sd, j+sd)) / s**2
+            ca = integrate(image, (i-cd, j-cd), (i+cd, j+cd)) / cs ** 2
+            sa = integrate(image, (i-sd, j-sd), (i+sd, j+sd)) / ss ** 2
             contrast_map[i, j] = sa - ca
 
     # Return contrast map without borders
@@ -39,9 +39,10 @@ if __name__ == "__main__":
     img_integral = integral_image(img_gray)
 
     # Create and display contrast map for each center+surround size.
-    center_surround = [[11, 21], [3, 7], [31, 51]]
-    for cs in center_surround:
-        img_contrast = create_contrast_map(img_integral, cs[0], cs[1])
+    center_surround_sizes = [[11, 21], [3, 7], [31, 51]]
+    for css in center_surround_sizes:
+        center_size, surround_size = css[0], css[1]
+        img_contrast = create_contrast_map(img_integral, center_size, surround_size)
         plt.imshow(img_contrast, cmap="gray")
         plt.show()
 

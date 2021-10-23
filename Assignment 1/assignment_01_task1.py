@@ -28,7 +28,7 @@ def to_grayscale(array):
 
 
 # Calculate histograms from array of grayscale images and attach respective label
-def calc_histogram(array, bins, label):
+def calc_histogram(label, array, bins):
     return [[label, np.histogram(a, bins, [0, 255])[0]] for a in array]
 
 
@@ -47,9 +47,9 @@ if __name__ == "__main__":
     test_labels = np.asarray(test_batch[b"labels"])
 
     # Extract 30 train/10 test images for labels 1, 4 and 8
-    auto_label, deer_label, ship_label = 1, 4, 8
     train_amount = 30
     test_amount = 10
+    auto_label, deer_label, ship_label = 1, 4, 8
     auto_train = extract_images(train_amount, train_data, train_labels, auto_label)
     deer_train = extract_images(train_amount, train_data, train_labels, deer_label)
     ship_train = extract_images(train_amount, train_data, train_labels, ship_label)
@@ -57,7 +57,7 @@ if __name__ == "__main__":
     deer_test = extract_images(test_amount, test_data, test_labels, deer_label)
     ship_test = extract_images(test_amount, test_data, test_labels, ship_label)
 
-    # Get train/test grayscale images
+    # Convert train/test images to grayscale
     auto_train_gray = to_grayscale(auto_train)
     deer_train_gray = to_grayscale(deer_train)
     ship_train_gray = to_grayscale(ship_train)
@@ -65,15 +65,15 @@ if __name__ == "__main__":
     deer_test_gray = to_grayscale(deer_test)
     ship_test_gray = to_grayscale(ship_test)
 
-    # Calculate histograms from train/test grayscale images; attach label for later
+    # Calculate train/test histograms from train/test grayscale images; attach label for later
     bin_sizes = [2, 10, 51, 255]
     for bs in bin_sizes:
-        auto_train_hists = calc_histogram(auto_train_gray, bs, auto_label)
-        deer_train_hists = calc_histogram(deer_train_gray, bs, deer_label)
-        ship_train_hists = calc_histogram(ship_train_gray, bs, ship_label)
-        auto_test_hists = calc_histogram(auto_train_gray, bs, auto_label)
-        deer_test_hists = calc_histogram(deer_train_gray, bs, deer_label)
-        ship_test_hists = calc_histogram(ship_train_gray, bs, ship_label)
+        auto_train_hists = calc_histogram(auto_label, auto_train_gray, bs)
+        deer_train_hists = calc_histogram(deer_label, deer_train_gray, bs)
+        ship_train_hists = calc_histogram(ship_label, ship_train_gray, bs)
+        auto_test_hists = calc_histogram(auto_label, auto_test_gray, bs)
+        deer_test_hists = calc_histogram(deer_label, deer_test_gray, bs)
+        ship_test_hists = calc_histogram(ship_label, ship_test_gray, bs)
 
         # Merge train/test hists
         train_hists = auto_train_hists+deer_train_hists+ship_train_hists

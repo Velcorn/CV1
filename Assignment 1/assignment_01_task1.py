@@ -28,7 +28,7 @@ def to_grayscale(array):
 
 
 # Calculate histograms from array of grayscale images and attach respective label
-def calc_histogram(label, array, bins):
+def calc_histograms(label, array, bins):
     return [[label, np.histogram(a, bins, [0, 255])[0]] for a in array]
 
 
@@ -68,12 +68,12 @@ if __name__ == "__main__":
     # Calculate train/test histograms from train/test grayscale images; attach label for later
     bin_sizes = [2, 10, 51, 255]
     for bs in bin_sizes:
-        auto_train_hists = calc_histogram(auto_label, auto_train_gray, bs)
-        deer_train_hists = calc_histogram(deer_label, deer_train_gray, bs)
-        ship_train_hists = calc_histogram(ship_label, ship_train_gray, bs)
-        auto_test_hists = calc_histogram(auto_label, auto_test_gray, bs)
-        deer_test_hists = calc_histogram(deer_label, deer_test_gray, bs)
-        ship_test_hists = calc_histogram(ship_label, ship_test_gray, bs)
+        auto_train_hists = calc_histograms(auto_label, auto_train_gray, bs)
+        deer_train_hists = calc_histograms(deer_label, deer_train_gray, bs)
+        ship_train_hists = calc_histograms(ship_label, ship_train_gray, bs)
+        auto_test_hists = calc_histograms(auto_label, auto_test_gray, bs)
+        deer_test_hists = calc_histograms(deer_label, deer_test_gray, bs)
+        ship_test_hists = calc_histograms(ship_label, ship_test_gray, bs)
 
         # Merge train/test hists
         train_hists = auto_train_hists+deer_train_hists+ship_train_hists

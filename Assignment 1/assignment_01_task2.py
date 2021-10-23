@@ -4,28 +4,27 @@ Adrian Westphal,
 Jan Willruth, 6768273
 """
 
-from skimage.io import imread
-from skimage.color import rgba2rgb, rgb2gray
-from skimage.transform.integral import integral_image, integrate
 import matplotlib.pyplot as plt
 import numpy as np
+from skimage.color import rgba2rgb, rgb2gray
+from skimage.io import imread
+from skimage.transform.integral import integral_image, integrate
 
 
 # Create a contrast map an integral image
 def create_contrast_map(image, c, s):
-    # Create black image according to image shape
+    # Create black image according to image shape without surround box borders
     y, x = image.shape
-    contrast_map = np.zeros((y, x))
+    contrast_map = np.zeros((y-s, x-s))
 
     # Iterate over pixels in bound of surround size, compute c and s, and set s-c in contrast_map
-    for i in range(s, y - s):
-        for j in range(s, x - s):
+    for i in range(s, y):
+        for j in range(s, x):
             center = integrate(image, (i-c, j-c), (i, j)) / c**2
             surround = integrate(image, (i-s, j-s), (i, j)) / s**2
-            contrast_map[i, j] = surround - center
+            contrast_map[i-s, j-s] = surround - center
 
-    # Return contrast map without borders
-    return contrast_map[s:y-s, s:x-s]
+    return contrast_map
 
 
 if __name__ == "__main__":

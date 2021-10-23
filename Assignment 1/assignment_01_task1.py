@@ -17,7 +17,8 @@ def unpickle(file):
 
 # Extract specified amount of images/data based on given label
 def extract_images(amount, data, labels, label):
-    # Get specified number of images that match given label, reshape into RGB format and type as float for calculations
+    # Get specified number of images that match given label,
+    # reshape into RGB format and convert to float for calculations
     return data[labels == label][:amount].reshape((amount, 3, -1)).astype(float)
 
 

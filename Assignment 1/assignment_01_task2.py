@@ -21,7 +21,7 @@ def create_contrast_map(image, cs, ss):
     cd, sd = cs // 2, ss // 2
 
     # Iterate over pixels in bound of surround distance, compute center- and surround average,
-    # and set surround average - center average in contrast_map
+    # and set surround average - center average at corresponding position in contrast_map
     for i in range(sd, y-sd):
         for j in range(sd, x-sd):
             ca = integrate(image, (i-cd, j-cd), (i+cd, j+cd)) / cs ** 2

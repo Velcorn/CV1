@@ -1,6 +1,6 @@
 """
 Chams Alassil Khoury, 7161852
-Adrian Westphal,
+Adrian Westphal, 6940017
 Jan Willruth, 6768273
 """
 
@@ -48,6 +48,6 @@ if __name__ == "__main__":
 
     '''
     How does the resulting contrast map change (upon changing window sizes)? 
-    Window size should roughly match the size of the object to highlight, i.e., 
-    smaller size highlights smaller objects, larger size highlights larger objects.
+    Smaller (window) size highlights smaller objects, larger size highlights larger objects.
+    Thus, window size should roughly match the size of the object to highlight.
     '''

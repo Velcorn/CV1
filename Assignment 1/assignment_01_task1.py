@@ -1,6 +1,6 @@
 """
 Chams Alassil Khoury, 7161852
-Adrian Westphal,
+Adrian Westphal, 6940017
 Jan Willruth, 6768273
 """
 
@@ -70,10 +70,10 @@ if __name__ == "__main__":
     for bs in bin_sizes:
         train_hists = []
         for ltrain in [[auto_label, auto_train_gray], [deer_label, deer_train_gray], [ship_label, ship_train_gray]]:
-            train_hists = train_hists + calc_histograms(ltrain[0], ltrain[1], bs)
+            train_hists += calc_histograms(ltrain[0], ltrain[1], bs)
         test_hists = []
         for ltest in [[auto_label, auto_test_gray], [deer_label, deer_test_gray], [ship_label, ship_test_gray]]:
-            test_hists = test_hists + calc_histograms(ltest[0], ltest[1], bs)
+            test_hists += calc_histograms(ltest[0], ltest[1], bs)
 
             # Calculate accuracy by iterating over the test_hists, calculating all distances with the train_hists and
         # comparing the label of the train_hist with the lowest distance to that of the test_hist

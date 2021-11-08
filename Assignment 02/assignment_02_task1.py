@@ -7,7 +7,7 @@ Jan Willruth, 6768273
 import matplotlib.pyplot as plt
 import numpy as np
 from skimage.io import imread
-from skimage.color import rgba2rgb, rgb2gray
+from skimage.color import rgb2gray
 from skimage.feature import match_template
 
 template = imread("coco264316clock.jpg")

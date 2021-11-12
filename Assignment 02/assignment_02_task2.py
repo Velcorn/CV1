@@ -19,23 +19,19 @@ S = gaussian(N, sigma=1.0)
 F_n = sobel(N)
 plt.title("F_n")
 plt.imshow(F_n, cmap="gray")
-# plt.show()
-plt.close()
+plt.show()
 F_s = sobel(S)
 plt.title("F_s")
 plt.imshow(F_s, cmap="gray")
-# plt.show()
-plt.close()
+plt.show()
 
 # Intensity hists
 plt.hist(F_n.ravel(), bins="auto")
 plt.title("Hist F_n")
-# plt.show()
-plt.close()
+plt.show()
 plt.hist(F_s.ravel(), bins="auto")
 plt.title("Hist F_s")
-# plt.show()
-plt.close()
+plt.show()
 
 # Picked threshold values from the plotted hists
 t_n, t_s = .12, .06
@@ -47,7 +43,6 @@ mask_F_n[mask_F_n > t_n] = 1
 plt.title("Mask F_n")
 plt.imshow(mask_F_n, cmap="gray")
 plt.show()
-plt.close()
 
 mask_F_s = F_s
 mask_F_s[mask_F_s < t_s] = 0
@@ -55,7 +50,6 @@ mask_F_s[mask_F_s > t_s] = 1
 plt.title("Mask F_s")
 plt.imshow(mask_F_s, cmap="gray")
 plt.show()
-plt.close()
 
 '''
 Did you notice it is almost impossible to tune the threshold for the noisy image to show

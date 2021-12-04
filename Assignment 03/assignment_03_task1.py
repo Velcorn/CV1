@@ -23,7 +23,7 @@ radius_pxl = {k: v / res / 2 for k, v in diameter_mm.items()}
 # Apply canny edge detector and visualize edges
 edges = canny(img_gray)
 plt.imshow(edges, cmap="gray")
-# plt.show()
+plt.show()
 plt.close()
 
 """
@@ -36,7 +36,7 @@ hough_circles = hough_circle(edges, radii)
 for i, hc in enumerate(hough_circles):
     plt.title(f"{coins[i]}")
     plt.imshow(hc, cmap="gray")
-    # plt.show()
+    plt.show()
     plt.close()
 
 # Extract peaks from Hough transform

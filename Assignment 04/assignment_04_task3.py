@@ -20,10 +20,10 @@ label = imread("0001_label.png")
 gt_segments = np.unique(label[label > 0])
 img_segments = [x for x in range(1, np.max(gt_segments) + 1)]
 img_seg = slic(img, n_segments=len(img_segments), compactness=10, start_label=1)
-"""plt.imshow(img_seg)
+plt.imshow(img_seg)
 plt.title("SLIC segmentation")
 plt.show()
-plt.close()"""
+plt.close()
 
 # Calculate undersegmentation error
 total_error = 0

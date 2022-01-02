@@ -57,5 +57,5 @@ print(f"Average segmentation error: {round(total_error / len(gt_segments), 2)}")
 Q: How does the average undersegmentation error change when you increase the desired
 number of superpixels n? Why?
 A: It gets lower because there are more segments/labels than there are in the ground truth, resulting in less area 
-for the sum which in turn results in smaller (more likely to be negative) numerators and thus smaller error(s).
+for the overlap sum which in turn results in smaller (more likely to be negative) numerators and thus smaller errors.
 """

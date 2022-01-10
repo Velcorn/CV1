@@ -17,7 +17,7 @@ label = imread("0001_label.png")
 # Apply SLIC to input and visualize
 # start_label = 1 to "suppress" FutureWarning
 gt_segments = np.unique(label[label > 0])
-img_segments = [x for x in range(1, np.max(gt_segments) + 1)]
+img_segments = [x for x in range(1, len(gt_segments) + 1)]
 img_seg = slic(img, n_segments=len(img_segments), compactness=10, start_label=1)
 plt.imshow(img_seg)
 plt.title("SLIC segmentation")
@@ -50,7 +50,7 @@ for gts in gt_segments:
     print(f"Error for segment {gts:02n}: {round(error, 2)}")
 
 # Calculate and print average error over ground truth segments
-print(f"Average segmentation error: {round(total_error / len(gt_segments), 2)}")
+print(f"Average undersegmentation error: {round(total_error / len(gt_segments), 2)}")
 
 
 """

@@ -4,6 +4,7 @@ Chams Alassil Khoury, 7161852
 Adrian Westphal, 6940017
 Jan Willruth, 6768273
 """
+import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -18,8 +19,8 @@ label = imread("0001_label.png")
 # start_label = 1 to "suppress" FutureWarning
 gt_segments = np.unique(label[label > 0])
 img_segments = [x for x in range(1, len(gt_segments) + 1)]
-img_seg = slic(img, n_segments=len(img_segments), compactness=10, start_label=1)
-plt.imshow(img_seg)
+img_segmented = slic(img, n_segments=len(img_segments), compactness=20, start_label=1)
+plt.imshow(img_segmented)
 plt.title("SLIC segmentation")
 plt.show()
 plt.close()
@@ -31,17 +32,17 @@ for gts in gt_segments:
     # Get coordinates and area for ground truth label
     gt_coords = np.where(label == gts)
     gt_coords = set(zip(*gt_coords))
-    gt_area = np.count_nonzero(label == gts)
+    gt_area = len(gt_coords)
 
     # Iterate over image segments
     seg_area = 0
-    for imgs in img_segments:
+    for seg in img_segments:
         # Get coordinates for image segment
-        imgs_coords = np.where(img_seg == imgs)
-        imgs_coords = list(zip(*imgs_coords))
+        seg_coords = np.where(img_segmented == seg)
+        seg_coords = list(zip(*seg_coords))
         # If any overlap exists, add to segmentation area
-        if any(coord in gt_coords for coord in imgs_coords):
-            seg_area += len(imgs_coords)
+        if any(coord in gt_coords for coord in seg_coords):
+            seg_area += len(seg_coords)
     # Calculate error for ground truth segment and increment total error
     error = (seg_area - gt_area) / gt_area
     total_error += error

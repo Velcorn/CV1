@@ -18,31 +18,34 @@ label = imread("0001_label.png")
 # Apply SLIC to input and visualize
 # start_label = 1 to "suppress" FutureWarning
 gt_segments = np.unique(label[label > 0])
-img_segments = [x for x in range(1, len(gt_segments) + 1)]
-img_segmented = slic(img, n_segments=len(img_segments), compactness=20, start_label=1)
-plt.imshow(img_segmented)
+img_segmented = slic(img, n_segments=len(gt_segments), compactness=10, start_label=1)
+img_segments = np.unique(img_segmented)
 plt.title("SLIC segmentation")
-plt.show()
+# plt.show()
 plt.close()
 
-# Calculate undersegmentation error
+# Calculate undersegmentation error:
 total_error = 0
+
+# Get segment coordinates in segmented image
+seg_coords = {}
+for seg in img_segments:
+    seg_coords[seg] = list(zip(*np.where(img_segmented == seg)))
+
 # Iterate over segments
 for gts in gt_segments:
     # Get coordinates and area for ground truth label
-    gt_coords = np.where(label == gts)
-    gt_coords = set(zip(*gt_coords))
+    gt_coords = set(zip(*np.where(label == gts)))
     gt_area = len(gt_coords)
 
     # Iterate over image segments
     seg_area = 0
     for seg in img_segments:
-        # Get coordinates for image segment
-        seg_coords = np.where(img_segmented == seg)
-        seg_coords = list(zip(*seg_coords))
+        coords = seg_coords[seg]
         # If any overlap exists, add to segmentation area
-        if any(coord in gt_coords for coord in seg_coords):
-            seg_area += len(seg_coords)
+        if any(coord in gt_coords for coord in coords):
+            seg_area += len(coords)
+
     # Calculate error for ground truth segment and increment total error
     error = (seg_area - gt_area) / gt_area
     total_error += error
@@ -57,6 +60,5 @@ print(f"Average undersegmentation error: {round(total_error / len(gt_segments), 
 """
 Q: How does the average undersegmentation error change when you increase the desired
 number of superpixels n? Why?
-A: It gets lower because there are more segments/labels than there are in the ground truth, resulting in less area 
-for the overlap sum which in turn results in smaller (more likely to be negative) numerators and thus smaller errors.
+A: It increases because more wrongly labeled superpixels overlap with the ground truth pixels.
 """
